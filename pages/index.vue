@@ -11,22 +11,34 @@
     <v-container fluid>
         <v-row no-gutters>
             <v-col cols="12">
+                <s>teste</s>
             </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script lang="ts">
-export default defineComponent({
-    setup() {
-        const handleLogout = (item: { action: string }) => {
-            console.log('Usuário fez logout');
-        };
 
-        return {
-            handleLogout,
-        };
-    },
+export default defineComponent({
+  setup() {
+    const handleLogout = (item: { action: string }) => {
+      console.log('Usuário fez logout');
+    };
+
+    const getUserTasks = async () => {
+    try {
+        const response = await useApi('task/6611e9299cd0a450907248e4', { method: 'GET' });
+        console.log(response);
+    } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+    }
+    };
+
+    return {
+      handleLogout,
+      getUserTasks
+    };
+  },
 });
 </script>
 
