@@ -38,22 +38,13 @@
       <v-col cols="8">
         
         <v-container>
-          <v-row class="task-list-item">
-            <v-col>teste</v-col>
-            <v-col class="task-actions">teste</v-col>
-          </v-row>
-          <v-row class="task-list-item">
-            <v-col>teste</v-col>
-            <v-col class="task-actions">teste</v-col>
-          </v-row>
-          <v-row class="task-list-item">
-            <v-col>teste</v-col>
-            <v-col class="task-actions">teste</v-col>
-          </v-row>
-          <v-row class="task-list-item">
-            <v-col>teste</v-col>
-            <v-col class="task-actions">teste</v-col>
-          </v-row>
+            <v-row class="task-list-item" >
+                <v-col>Nome da tarefa</v-col>
+                <v-col>
+                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
+                </v-col>
+            </v-row>
+          
         </v-container>
 
       </v-col>
@@ -64,6 +55,7 @@
 <script setup lang="ts">
   import { defineProps } from "vue";
     const taskSelected = ref(true);
+    const toast = useToast();
 
     const props = defineProps({
       title: { type: String, required: true },
@@ -71,10 +63,13 @@
       tab: { type: String, required: true },
     });
 
-    const notify = () => {
-      const toast = useToast();
-      toast.success("Usuário deslogou com sucesso");
+    const editTask = () => {
+      toast.success("Editando tarefa");
     };
+
+    const deleteTask = () => {
+      toast.error("Tarefa deletada");
+    };  
 
     const getUserTasks = async () => {
       try {
@@ -110,6 +105,8 @@
 }
 
 .task-list-item {
+  display: flex;
+  align-items: center;
   list-style-type: none;
   padding: 0px 15px;
   margin: 3px 0!important;
@@ -118,13 +115,8 @@
   border-radius: 25px;
 }
 
-.task-list-item :hover {
-  background-color: #f7d7a8;
-}
-
-.task-actions {
-  display: flex;
-  justify-content: flex-end
+.task-list-item:hover {
+  cursor: pointer;
 }
 
 .title {

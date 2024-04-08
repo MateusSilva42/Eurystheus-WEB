@@ -30,7 +30,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
 const emit = defineEmits(["update:enable", "close"]);
 const taskTitle = ref("");
 const taskDescription = ref("");
