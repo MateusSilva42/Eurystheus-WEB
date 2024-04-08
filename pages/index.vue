@@ -2,7 +2,7 @@
     <v-toolbar color="warning" flat dense :elevation="3" title="Eurystheus">
             <v-menu>
                 <template v-slot:activator="{ props }">
-                    <v-btn icon v-bind="props" @click="handleLogout">
+                    <v-btn icon v-bind="props" @click="notify">
                         <v-icon>mdi-logout</v-icon>
                     </v-btn>
                 </template>
@@ -21,8 +21,13 @@
 
 export default defineComponent({
   setup() {
+    const notify = () => {
+        const toast = useToast()
+            toast.success('Usuário deslogou com sucesso');
+        }
+
     const handleLogout = (item: { action: string }) => {
-      console.log('Usuário fez logout');
+        console.log('Usuário fez logout');
     };
 
     const getUserTasks = async () => {
@@ -36,7 +41,8 @@ export default defineComponent({
 
     return {
       handleLogout,
-      getUserTasks
+      getUserTasks,
+      notify
     };
   },
 });
