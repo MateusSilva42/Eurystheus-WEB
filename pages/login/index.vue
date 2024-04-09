@@ -34,18 +34,65 @@
 
 <script setup lang="ts">
 import { useDisplay } from 'vuetify';
+import { useRouter } from 'vue-router';
+
 const display = useDisplay();
 const toast = useToast();
+const router = useRouter();
 
 const user = ref("");
 const password = ref("");
+const loading = ref(false);
 
 const isSmallScreen = computed(() => {
     return display.mobile.value || display.xs.value;
 });
 
-const login = () => {
-    toast.success("Login efetuado com sucesso");
+const login = async () => {
+    loading.value = true;
+    try{
+        const data = {
+            user: user.value,
+            password: password.value
+        }
+
+        const getCSRFToken = await useApi("auth/csrf-token", {
+            method: "GET",
+        }) as {csrfToken: string};
+        if(!getCSRFToken){
+            throw new Error("Erro realizar login.");
+        }
+
+        document.cookie = `csrf=${getCSRFToken.csrfToken}; path=/`;
+
+        //armazenar no session storage
+        const StringfiedCSRFToken = JSON.stringify(getCSRFToken.csrfToken);
+        sessionStorage.setItem("csrf", StringfiedCSRFToken);
+
+        console.log('CSRF Token: ', getCSRFToken.csrfToken);
+
+        const login = await useApi("auth", {
+        method: "POST",
+        data,
+        }) as {auth: string};
+        if(!login){
+            throw new Error("Erro realizar login.");
+        }
+
+        //armazenar no local storage
+        const StringfiedLogin = JSON.stringify(login.auth);
+        localStorage.setItem("token", StringfiedLogin);
+
+        console.log('Dados recebidos do login: ', login);
+        
+        router.push("/");
+        loading.value = false;
+
+
+    }catch(error:unknown){
+        toast.error("Erro ao fazer login");
+        loading.value = false;
+    }
 }
 
 </script>

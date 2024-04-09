@@ -81,6 +81,7 @@ const register = async ()=> {
         method: "POST",
         data,
         });
+        
         if(!newUser){
             toast.success("Erro ao cadastrar novo usuário");
         }
