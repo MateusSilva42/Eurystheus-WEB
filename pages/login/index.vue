@@ -18,7 +18,7 @@
                             <v-text-field label="Senha" v-model="password" outlined></v-text-field>
                             <v-btn color="primary" @click="login">Entrar</v-btn>
                         </v-form>
-                        <p class="login-text">Não possui conta? se <a href="/login/register"> cadastre</a></p>
+                        <p class="login-text">Não possui conta? se <a href="/register"> cadastre</a></p>
                     </v-card-text>
                 </v-card>
                     </v-col>
@@ -35,10 +35,19 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify';
 const display = useDisplay();
+const toast = useToast();
+
+const user = ref("");
+const password = ref("");
 
 const isSmallScreen = computed(() => {
     return display.mobile.value || display.xs.value;
 });
+
+const login = () => {
+    toast.success("Login efetuado com sucesso");
+}
+
 </script>
 
 <style scoped>
