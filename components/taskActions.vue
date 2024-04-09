@@ -16,7 +16,7 @@
       </template>
     </v-tooltip>
 
-    <v-tooltip text="Deletar tarefa" location="top">
+    <v-tooltip text="deletar tarefa" location="top">
       <template v-slot:activator="{ props }">
         <v-btn v-bind="props" icon @click="emit('delete')" size="small">
           <v-icon color="red">mdi-trash-can</v-icon>

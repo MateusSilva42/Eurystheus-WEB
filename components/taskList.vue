@@ -5,8 +5,8 @@
         <h2>{{ title }}</h2>
       </v-col>
     </v-row>
-    <v-row class="task-list">
-      <v-col cols="3" class="task-details">
+    <v-row :class="isSmallScreen? 'task-list-sm': 'task-list-bg'">
+      <v-col cols="12" lg="3" :class="isSmallScreen? 'task-details-sm': 'task-details-bg'">
         <v-container v-if="taskSelected">
           <v-row>
             <v-col cols="12">
@@ -35,11 +35,77 @@
           </v-row>
         </v-container>
       </v-col>
-      <v-col cols="8">
-        
+      
+      <v-col cols="12" sm="8">
         <v-container>
-            <v-row class="task-list-item" >
-                <v-col>Nome da tarefa</v-col>
+            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
+                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
+                <v-col>
+                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
+                </v-col>
+            </v-row>
+            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
+                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
+                <v-col>
+                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
+                </v-col>
+            </v-row>
+            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
+                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
+                <v-col>
+                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
+                </v-col>
+            </v-row>
+            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
+                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
+                <v-col>
+                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
+                </v-col>
+            </v-row>
+            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
+                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
+                <v-col>
+                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
+                </v-col>
+            </v-row>
+            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
+                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
+                <v-col>
+                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
+                </v-col>
+            </v-row>
+            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
+                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
+                <v-col>
+                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
+                </v-col>
+            </v-row>
+            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
+                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
+                <v-col>
+                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
+                </v-col>
+            </v-row>
+            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
+                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
+                <v-col>
+                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
+                </v-col>
+            </v-row>
+            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
+                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
+                <v-col>
+                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
+                </v-col>
+            </v-row>
+            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
+                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
+                <v-col>
+                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
+                </v-col>
+            </v-row>
+            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
+                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
                 <v-col>
                   <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
                 </v-col>
@@ -54,8 +120,10 @@
 
 <script setup lang="ts">
   import { defineProps } from "vue";
+import { useDisplay } from "vuetify";
     const taskSelected = ref(true);
     const toast = useToast();
+    const display = useDisplay();
 
     const props = defineProps({
       title: { type: String, required: true },
@@ -82,17 +150,40 @@
       }
     };
 
+    const isSmallScreen = computed(() => {
+      return display.mobile.value || display.xs.value;
+    });
+
 </script>
 
 <style>
-.task-list {
+.task-list-bg {
   display: flex;
   justify-content: center;
   height: 70vh;
   overflow: auto;
 }
 
-.task-details {
+.task-list-sm {
+  display: flex;
+  flex-direction: column;
+  width: 100%
+}
+
+.task-details-bg {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  margin-right: 15px;
+  padding: 5px;
+  background-color: #fdca9d;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+}
+.task-details-sm {
+  width: 100%;
+  display: flex;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -104,7 +195,7 @@
   border-radius: 25px;
 }
 
-.task-list-item {
+.task-list-item-bg {
   display: flex;
   align-items: center;
   list-style-type: none;
@@ -114,6 +205,18 @@
   border: 1px solid #ccc;
   border-radius: 25px;
 }
+.task-list-item-sm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  list-style-type: none;
+  margin: 3px 0!important;
+  background-color: #fdca9d;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+}
+
 
 .task-list-item:hover {
   cursor: pointer;

@@ -11,27 +11,30 @@
 
   <v-container>
     <v-card variant="outlined">
-      <v-tabs v-model="tab" bg-color="warning" fixed-tabs>
-          <v-tab value="all">Todas as tarefas</v-tab>
-          <v-tab value="done">Concluídas</v-tab>
-          <v-tab value="pendent">Pendentes</v-tab>
-      </v-tabs>
-
+      <v-row>
+        <v-col cols="12">
+            <v-tabs v-model="tab" bg-color="warning" fixed-tabs :vertical="true" center-active show-arrows>
+                <v-tab value="all">Todas as tarefas</v-tab>
+                <v-tab value="done">Concluídas</v-tab>
+                <v-tab value="pendent">Pendentes</v-tab>
+            </v-tabs>
+        </v-col>
       <v-card-text>
         <v-window v-model="tab">
           <v-window-item value="all">
-            <TaskList title="Todas as tarefas" scope="all" :tab="tab" />
+            <TaskList key="all" title="Todas as tarefas" scope="all" :tab="tab" />
           </v-window-item>
 
           <v-window-item value="done">
-              <TaskList title="Tarefas concluídas" scope="done" :tab="tab" />
+              <TaskList key="done" title="Tarefas concluídas" scope="done" :tab="tab" />
           </v-window-item>
 
           <v-window-item value="pendent">
-              <TaskList title="Tarefas pendentes" scope="pendent" :tab="tab" />
+              <TaskList key="pendent" title="Tarefas pendentes" scope="pendent" :tab="tab" />
           </v-window-item>
         </v-window>
       </v-card-text>
+    </v-row>
     </v-card>
   </v-container>
 
@@ -40,10 +43,11 @@
   <v-footer>Mateus Silva © - 2024</v-footer>
 </template>
 
-<script lang="ts">
-export default defineComponent({
-  setup() {
-    const tab = ref('all');
+<script setup lang="ts">
+import { useDisplay } from 'vuetify';
+
+    let tab = ref('');
+    const display = useDisplay();
 
     const notify = () => {
       const toast = useToast();
@@ -65,14 +69,10 @@ export default defineComponent({
       }
     };
 
-    return {
-      handleLogout,
-      getUserTasks,
-      notify,
-      tab,
-    };
-  },
-});
+    const isSmallScreen = computed(() => {
+      return display.mobile.value || display.xs.value;
+    });
+
 </script>
 
 <style>

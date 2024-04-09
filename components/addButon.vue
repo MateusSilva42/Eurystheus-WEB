@@ -1,5 +1,5 @@
 <template>
-    <v-tooltip text="Criar nova tarefa">
+    <v-tooltip text="Criar tarefa">
     <template v-slot:activator="{ props }">
         <v-btn v-bind="props" class="add-button" @click="openModal" color="warning"><v-icon>mdi-plus</v-icon></v-btn>
     </template>
