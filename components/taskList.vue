@@ -58,8 +58,9 @@
         </v-col>
       </v-row>
     </v-container>
-    <ModalConfirm :enable.sync="confirmDelete" message="Deseja realmente deletar essa tarefa? Não é possível desfazer essa ação." @confirm="deleteTask(currentTask)" />
-    <ModalConfirm :enable.sync="confirmFinish" message="Deseja realmente finalizar essa tarefa? Não é possível desfazer essa ação." @confirm="finishTask" />
+    <ModalConfirm :enable.sync="confirmDelete" message="Deseja realmente deletar essa tarefa? Não é possível desfazer essa ação." @confirm="deleteTask(currentTask)" @close="() => confirmDelete = false" />
+    <ModalConfirm :enable.sync="confirmFinish" message="Deseja realmente finalizar essa tarefa? Não é possível desfazer essa ação." @confirm="finishTask" @close="() => confirmFinish = false" />
+    <ModalAddView :enable.sync="modalEdit" :task="taskOnEdit" scope="edit" @close="() => modalEdit = false" />
    
 </template>
 
@@ -70,14 +71,27 @@ import { useDisplay } from "vuetify";
     const toast = useToast();
     const display = useDisplay();
     const emit = defineEmits(["finishedLoading", "startLoading"]);
+
     const userTasks = ref<Task[]>([]);
+    const allTasks = ref<Task[]>([]);
+    const finishedTasks = ref<Task[]>([]);
+    const pendentTasks = ref<Task[]>([]);
+
+
     const currentTask = ref<Task>() || undefined;
     const currentTaskStatus = ref('');
     const currentStatusColor = ref('');
     const currentTaskFinished = ref(false);
     const loading = ref(false);
+
     const confirmDelete = ref(false);
     const confirmFinish = ref(false);
+    const modalEdit = ref(false);
+    const taskOnEdit = {
+      title: '',
+      content: '',
+      id: '',
+    }
 
     interface Task {
       content: string;
@@ -86,7 +100,6 @@ import { useDisplay } from "vuetify";
       title: string;
       userId: string;
     }
-
 
     const props = defineProps({
       title: { type: String, required: true },
@@ -100,12 +113,13 @@ import { useDisplay } from "vuetify";
     });
 
     const editTask = (task: Task) => {
-      if(task.done) {
-        toast.error("Não é possível editar uma tarefa concluída");
-        return;
-      }
-      toast.success("Editando tarefa");
-      
+      if(task.done) return toast.error("Tarefa concluída não pode ser editada");
+
+      taskOnEdit.title = task.title;
+      taskOnEdit.content = task.content;
+      taskOnEdit.id = task.id;
+
+      modalEdit.value = true;
     };
 
     const modalConfirmDelete = (task: Task) => {
@@ -149,7 +163,15 @@ import { useDisplay } from "vuetify";
           method: "GET",
         });
         if (!response) throw new Error("Erro ao buscar dados");
-        userTasks.value = response as Task[]
+        const tasks = response as Task[];
+
+        if(props.scope == 'all') {
+          userTasks.value = tasks
+        } else if (props.scope == 'pendent') {
+          userTasks.value = tasks.filter(task => task.done === false)
+        } else if (props.scope == 'done') {
+          userTasks.value = tasks.filter(task => task.done === true)
+        }
 
         loading.value=false
         

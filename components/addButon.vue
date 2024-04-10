@@ -5,7 +5,7 @@
     </template>
     </v-tooltip>
     
-    <ModalAddView :enable="enable" :userId="userId" @close="closeModal" />
+    <ModalAddView :enable="enable" :userId="userId" @close="closeModal" scope="new" />
 </template>
 
 <script setup lang="ts">

@@ -4,10 +4,12 @@
       <template v-slot:default="{ isActive }">
         <v-card class="card">
             <v-card-title class="card-title">
-                <span>Nova Tarefa</span>    
+                <span>{{ modalTitle }}</span>    
             </v-card-title>
           <v-card-text>
             <v-row>
+              
+              {{ props.task?.title }}
               <v-col cols="12">
                 <v-text-field label="Título" v-model="taskTitle" outlined></v-text-field>
               </v-col>
@@ -38,18 +40,37 @@ const loading = ref(false);
 
 const props = defineProps({
   enable: { type: Boolean, required: true },
-  userId: { type: String, required: true},
+  userId: { type: String, required: false},
+  scope: { type: String, required: true},
+  task: { type: Object, required: false},
 });
+const modalTitle = ref(props.scope === "new" ? "Nova tarefa" : "Editar tarefa");
+
 
 const enableValue = computed({
   get: () => props.enable,
   set: (value) => emit("update:enable", value),
 })
 
+onUpdated(() => {
+  if(props.task){
+    taskTitle.value = props.task.title;
+    taskDescription.value = props.task.content;
+  }
+})
+
 const toast = useToast();
 
 const saveData = async () => {
-    loading.value = true;
+  if(props.scope === "new"){
+    createTask();
+  } else {
+    updateTask();
+  } 
+}
+
+const createTask = async () => {
+  loading.value = true;
     try{
       if(taskTitle.value === "" || taskDescription.value === ""){
         toast.error("Preencha todos os campos");
@@ -79,6 +100,38 @@ const saveData = async () => {
         loading.value = false;
         toast.error("Erro ao salvar tarefa");
     }
+}
+
+const updateTask = async() => {
+  loading.value = true;
+  try{
+    if(taskTitle.value === "" || taskDescription.value === ""){
+      toast.error("Preencha todos os campos");
+      return;
+    }
+
+    const data = {
+      title: taskTitle.value,
+      content: taskDescription.value,
+    }
+
+    const updatedTask = await useApi(`task/${props.task?.id}`, {
+      method: "PUT",
+      data
+    });
+    if(!updatedTask) throw new Error("Erro ao salvar tarefa");
+    toast.success("Tarefa atualizada com sucesso");
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+    
+    loading.value = false;
+    emit("close");
+
+  } catch(error:unknown){
+      loading.value = false;
+      toast.error("Erro ao salvar tarefa");
+  }
 }
 
 </script>
