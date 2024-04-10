@@ -1,4 +1,5 @@
 # Nuxt 3 Minimal Starter
+Aplicação web rodando em: https://eurystheus-web.vercel.app/login
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
