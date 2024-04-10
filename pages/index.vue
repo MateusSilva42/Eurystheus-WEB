@@ -32,18 +32,20 @@
         <v-card-text>
           <v-window v-model="tab">
             <v-window-item value="all">
-              <TaskList key="all" title="Todas as tarefas" scope="all" :tab="tab" />
+              <TaskList key="all" title="Todas as tarefas" scope="all" :userId="currentUser.id" :tab="tab" @startLoading="startLoading" @finishedLoading="finishedLoading" />
             </v-window-item>
 
             <v-window-item value="done">
-              <TaskList key="done" title="Tarefas concluídas" scope="done" :tab="tab" />
+              <TaskList key="done" title="Tarefas concluídas" scope="done"  :userId="currentUser.id" :tab="tab" @startLoading="startLoading" @finishedLoading="finishedLoading" />
             </v-window-item>
 
             <v-window-item value="pendent">
-              <TaskList key="pendent" title="Tarefas pendentes" scope="pendent" :tab="tab" />
+              <TaskList key="pendent" title="Tarefas pendentes" scope="pendent"  :userId="currentUser.id" :tab="tab" @startLoading="startLoading" @finishedLoading="finishedLoading" />
             </v-window-item>
           </v-window>
         </v-card-text>
+        
+        
       </v-row>
     </v-card>
   </v-container>
@@ -100,17 +102,7 @@ const getUserData = async () => {
   }
   
 }
-  
 
-const getUserTasks = async () => {
-  try {
-    const response = await useApi("task/6611e9299cd0a450907248e4", {
-      method: "GET",
-    });
-  } catch (error) {
-    console.error("Erro ao buscar dados:", error);
-  }
-};
 
 const isSmallScreen = computed(() => {
   return display.mobile.value || display.xs.value;

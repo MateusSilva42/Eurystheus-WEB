@@ -67,10 +67,11 @@ const saveData = async () => {
         data
       });
       if(!newTask) throw new Error("Erro ao salvar tarefa");
-
-      toast.success("Tarefa salva com sucesso");
+      
       loading.value = false;
       emit("close");
+      window.location.reload();
+
 
     } catch(error:unknown){
         loading.value = false;

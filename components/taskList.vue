@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="!loading" >
     <v-row>
       <v-col cols="12" class="title">
         <h2>{{ title }}</h2>
@@ -37,75 +37,9 @@
       </v-col>
       
       <v-col cols="12" sm="8">
-        <v-container>
+        <v-container v-for="task in userTasks" :key="task.id">
             <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
-                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
-                <v-col>
-                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
-                </v-col>
-            </v-row>
-            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
-                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
-                <v-col>
-                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
-                </v-col>
-            </v-row>
-            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
-                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
-                <v-col>
-                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
-                </v-col>
-            </v-row>
-            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
-                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
-                <v-col>
-                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
-                </v-col>
-            </v-row>
-            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
-                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
-                <v-col>
-                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
-                </v-col>
-            </v-row>
-            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
-                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
-                <v-col>
-                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
-                </v-col>
-            </v-row>
-            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
-                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
-                <v-col>
-                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
-                </v-col>
-            </v-row>
-            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
-                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
-                <v-col>
-                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
-                </v-col>
-            </v-row>
-            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
-                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
-                <v-col>
-                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
-                </v-col>
-            </v-row>
-            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
-                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
-                <v-col>
-                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
-                </v-col>
-            </v-row>
-            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
-                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
-                <v-col>
-                  <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
-                </v-col>
-            </v-row>
-            <v-row :class="isSmallScreen? 'task-list-item-sm': 'task-list-item-bg'" >
-                <v-col>Nome da tarefa mais longo para testar a responsividade</v-col>
+                <v-col>{{ task.title }}</v-col>
                 <v-col>
                   <TaskActions @view="editTask" @edit="editTask" @delete="deleteTask" />
                 </v-col>
@@ -116,6 +50,13 @@
       </v-col>
     </v-row>
   </v-container>
+  <v-container v-else>
+          <v-row>
+            <v-col style="display: flex; justify-content: center;">
+              <v-progress-circular indeterminate  model-value="20" :size="123" :width="12" color="red" />
+            </v-col>
+          </v-row>
+        </v-container>
 </template>
 
 <script setup lang="ts">
@@ -124,11 +65,28 @@ import { useDisplay } from "vuetify";
     const taskSelected = ref(true);
     const toast = useToast();
     const display = useDisplay();
+    const emit = defineEmits(["finishedLoading", "startLoading"]);
+    const userTasks = ref<Task[]>([]);
+    const loading = ref(false)
+
+    interface Task {
+      content: string;
+      done: boolean;
+      id: string;
+      title: string;
+      userId: string;
+    }
+
 
     const props = defineProps({
       title: { type: String, required: true },
       scope: { type: String, required: true, default: "all" },
       tab: { type: String, required: true },
+      userId: {type: String, required: true},
+    });
+
+    onBeforeMount(() => {
+      getUserTasks();
     });
 
     const editTask = () => {
@@ -140,12 +98,20 @@ import { useDisplay } from "vuetify";
     };  
 
     const getUserTasks = async () => {
+      loading.value= true
       try {
-        const response = await useApi("task/6611e9299cd0a450907248e4", {
+        const response = await useApi(`task/${props.userId}`, {
           method: "GET",
         });
+        if (!response) throw new Error("Erro ao buscar dados");
+        userTasks.value = response as Task[]
+
+        loading.value=false
+        
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
+        toast.error("Erro ao carregar tarefas do usuário");
+        loading.value=false
       }
     };
 
