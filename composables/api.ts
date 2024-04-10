@@ -15,7 +15,8 @@ function getCookie(name:string) {
     const csrfToken = getCookie('csrf');
 
     const token = JSON.parse(stringToken? stringToken : 'null');
-    const baseUrl = `http://localhost:8000/api/${url}`;
+    // const baseUrl = `http://localhost:8000/api/${url}`; DEV
+    const baseUrl = `https://eurystheus-api.onrender.com/api/${url}`; //PROD
     const body = options?.data ? JSON.stringify(options.data) : undefined;
 
     const headers = {
