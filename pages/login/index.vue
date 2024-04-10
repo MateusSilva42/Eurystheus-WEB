@@ -18,7 +18,7 @@
                             <v-text-field label="Senha" v-model="password" outlined></v-text-field>
                             <v-btn :loading="loading" color="primary" @click="login">Entrar</v-btn>
                         </v-form>
-                        <p class="login-text">Não possui conta? se <a href="/register"> cadastre</a></p>
+                        <p class="login-text">Não possui conta? se <a href="#" @click="goToRegister"> cadastre</a></p>
                     </v-card-text>
                 </v-card>
                     </v-col>
@@ -81,7 +81,7 @@ const login = async () => {
         const StringfiedLogin = JSON.stringify(login.auth);
         localStorage.setItem("token", StringfiedLogin);
 
-        router.push("/");
+        router.replace("/");
         loading.value = false;
 
 
@@ -89,6 +89,10 @@ const login = async () => {
         toast.error("Erro ao fazer login");
         loading.value = false;
     }
+}
+
+const goToRegister = () => {
+    router.replace("/register");
 }
 
 </script>

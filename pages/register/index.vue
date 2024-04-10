@@ -21,7 +21,7 @@
                         <v-text-field label="Senha" :rules="passwordRules" v-model="password" outlined required></v-text-field>
                         <v-btn :loading="loading" color="primary" @click="register">Cadastrar</v-btn>
                     </v-form>
-                    <p class="login-text">Já possui conta? faça <a href="/login"> login</a></p>
+                    <p class="login-text">Já possui conta? faça <a href="#" @click="goToLogin"> login</a></p>
                 </v-card-text>
             </v-card>
                 </v-col>
@@ -91,7 +91,7 @@ const register = async ()=> {
         }, 1000);
         setTimeout(() => {
             loading.value = false;
-            router.push("/login");
+            router.replace("/login");
         }, 3000);
 
     }catch(error: unknown){
@@ -103,6 +103,11 @@ const register = async ()=> {
         loading.value = false;
     }
 }
+
+const goToLogin = () => {
+    router.replace("/login");
+}
+
 </script>
 
 <style scoped>

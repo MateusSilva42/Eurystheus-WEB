@@ -65,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-  import { defineProps } from "vue";
+
 import { useDisplay } from "vuetify";
     const taskSelected = ref(false);
     const toast = useToast();
@@ -73,10 +73,6 @@ import { useDisplay } from "vuetify";
     const emit = defineEmits(["finishedLoading", "startLoading"]);
 
     const userTasks = ref<Task[]>([]);
-    const allTasks = ref<Task[]>([]);
-    const finishedTasks = ref<Task[]>([]);
-    const pendentTasks = ref<Task[]>([]);
-
 
     const currentTask = ref<Task>() || undefined;
     const currentTaskStatus = ref('');
@@ -154,6 +150,8 @@ import { useDisplay } from "vuetify";
       currentTask.value = task
       taskSelected.value = true;
       console.log('task atual', currentTask.value);
+
+      if(isSmallScreen) window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     const getUserTasks = async () => {
