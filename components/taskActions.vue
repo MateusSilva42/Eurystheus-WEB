@@ -27,7 +27,9 @@
 </template>
 
 <script setup lang="ts">
+
 const emit = defineEmits(["view", "edit", "delete"]);
+
 </script>
 
 <style>

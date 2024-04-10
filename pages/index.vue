@@ -23,7 +23,7 @@
     <v-card variant="outlined">
       <v-row>
         <v-col cols="12">
-          <v-tabs v-model="tab" bg-color="#ff4500" fixed-tabs :vertical="true" center-active show-arrows>
+          <v-tabs v-model="tab" bg-color="#ff4500" color="white" fixed-tabs :vertical="true" center-active show-arrows>
             <v-tab value="all">Todas as tarefas</v-tab>
             <v-tab value="done">Concluídas</v-tab>
             <v-tab value="pendent">Pendentes</v-tab>
@@ -32,15 +32,15 @@
         <v-card-text>
           <v-window v-model="tab">
             <v-window-item value="all">
-              <TaskList key="all" title="Todas as tarefas" scope="all" :userId="currentUser.id" :tab="tab" @startLoading="startLoading" @finishedLoading="finishedLoading" />
+              <TaskList key="all" title="Todas as tarefas" scope="all" :userId="currentUser.id" :tab="tab" />
             </v-window-item>
 
             <v-window-item value="done">
-              <TaskList key="done" title="Tarefas concluídas" scope="done"  :userId="currentUser.id" :tab="tab" @startLoading="startLoading" @finishedLoading="finishedLoading" />
+              <TaskList key="done" title="Tarefas concluídas" scope="done"  :userId="currentUser.id" :tab="tab" />
             </v-window-item>
 
             <v-window-item value="pendent">
-              <TaskList key="pendent" title="Tarefas pendentes" scope="pendent"  :userId="currentUser.id" :tab="tab" @startLoading="startLoading" @finishedLoading="finishedLoading" />
+              <TaskList key="pendent" title="Tarefas pendentes" scope="pendent"  :userId="currentUser.id" :tab="tab" />
             </v-window-item>
           </v-window>
         </v-card-text>

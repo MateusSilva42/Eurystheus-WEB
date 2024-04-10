@@ -20,8 +20,8 @@
           <v-card-actions>
             <v-spacer></v-spacer>
 
-            <v-btn color="error" variant="tonal" text="Cancelar" @click="$emit('close')"></v-btn>
-            <v-btn color="success" variant="tonal" text="Salvar" @click="saveData" :loading="loading"></v-btn>
+            <v-btn color="error" variant="flat" text="Cancelar" @click="$emit('close')"></v-btn>
+            <v-btn color="success" variant="flat" text="Salvar" @click="saveData" :loading="loading"></v-btn>
           </v-card-actions>
         </v-card>
       </template>
@@ -67,11 +67,13 @@ const saveData = async () => {
         data
       });
       if(!newTask) throw new Error("Erro ao salvar tarefa");
+      toast.success("Tarefa criada com sucesso");
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
       
       loading.value = false;
       emit("close");
-      window.location.reload();
-
 
     } catch(error:unknown){
         loading.value = false;
