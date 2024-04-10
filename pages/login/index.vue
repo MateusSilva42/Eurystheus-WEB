@@ -62,7 +62,6 @@ const login = async () => {
             throw new Error("Erro realizar login.");
         }
 
-        console.log('token gerado', getCSRFToken.csrfToken)
         document.cookie = `csrf=${getCSRFToken.csrfToken}; path=/`;
 
         const login = await useApi("auth", {

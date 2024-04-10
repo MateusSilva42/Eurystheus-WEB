@@ -12,17 +12,11 @@ function getCookie(name:string) {
     }
   }
 }
-    
     const csrfToken = getCookie('csrf');
 
     const token = JSON.parse(stringToken? stringToken : 'null');
     const baseUrl = `http://localhost:8000/api/${url}`;
     const body = options?.data ? JSON.stringify(options.data) : undefined;
-
-    // body = {
-    //   ...options?.data,
-    //   _csrf: csrfToken,
-    // }
 
     const headers = {
       'content-type': 'application/json',
@@ -30,11 +24,6 @@ function getCookie(name:string) {
       Authorization: `Bearer ${token}`,
       'x-csrf-Token': csrfToken,
     };
-
-    // console.log('body enviado', body);
-    
-    console.log('Headers enviados', headers);
-    
 
     return $fetch(baseUrl, { method: options?.method, headers, body }); 
 

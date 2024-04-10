@@ -149,7 +149,6 @@ import { useDisplay } from "vuetify";
       getTaskStatus(task.done)
       currentTask.value = task
       taskSelected.value = true;
-      console.log('task atual', currentTask.value);
 
       if(isSmallScreen) window.scrollTo({top: 0, behavior: 'smooth'});
     }
