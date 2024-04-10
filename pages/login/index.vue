@@ -69,8 +69,6 @@ const login = async () => {
         const StringfiedCSRFToken = JSON.stringify(getCSRFToken.csrfToken);
         sessionStorage.setItem("csrf", StringfiedCSRFToken);
 
-        console.log('CSRF Token: ', getCSRFToken.csrfToken);
-
         const login = await useApi("auth", {
         method: "POST",
         data,
@@ -83,8 +81,6 @@ const login = async () => {
         const StringfiedLogin = JSON.stringify(login.auth);
         localStorage.setItem("token", StringfiedLogin);
 
-        console.log('Dados recebidos do login: ', login);
-        
         router.push("/");
         loading.value = false;
 

@@ -144,7 +144,6 @@ import { useDisplay } from "vuetify";
         const response = await useApi("task/6611e9299cd0a450907248e4", {
           method: "GET",
         });
-        console.log(response);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }

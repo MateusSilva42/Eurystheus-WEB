@@ -5,11 +5,15 @@
     </template>
     </v-tooltip>
     
-    <ModalAddView title="Criar nova tarefa" scope="new" :enable="enable" @close="closeModal" />
+    <ModalAddView :enable="enable" :userId="userId" @close="closeModal" />
 </template>
 
 <script setup lang="ts">
 const enable = ref(false);
+
+const props = defineProps({
+  userId: { type: String, required: true},
+});
 
 const openModal = () => {
   enable.value = true;

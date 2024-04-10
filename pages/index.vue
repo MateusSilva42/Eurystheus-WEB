@@ -7,7 +7,7 @@
 
     <v-spacer></v-spacer>
     <div class="toolbar-right">
-      <v-toolbar-title>Olá, @Mateus</v-toolbar-title>
+      <v-toolbar-title>Olá, @{{ currentUser.username }}</v-toolbar-title>
       <v-menu>
         <template v-slot:activator="{ props }">
           <v-btn icon v-bind="props" @click="handleLogout">
@@ -48,7 +48,7 @@
     </v-card>
   </v-container>
 
-  <AddButon />
+  <AddButon :userId="currentUser.id" />
 
   <v-footer>Mateus Silva © - 2024</v-footer>
 </template>
@@ -56,22 +56,57 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify';
 import { useRouter } from '#vue-router';
+import {jwtDecode} from "jwt-decode";
+
+interface CustonJwtPayload {
+  username: string;
+  userId: string;
+  iat: number;
+  exp: number;
+}
 
 let tab = ref('');
 const display = useDisplay();
 const router = useRouter();
+
+const currentUser = ref({
+  id: "",
+  username: ""
+});
 
 const handleLogout = () => {
    localStorage.removeItem("token");
     router.push("/login");
 };
 
+onBeforeMount(() => {
+  getUserData();
+  
+});
+
+const getUserData = async () => {
+  try{
+    const token = localStorage.getItem("token");
+    if(!token) return;
+
+    const decoded = jwtDecode<CustonJwtPayload>(token);
+    
+    currentUser.value.id = decoded.userId;
+    currentUser.value.username = decoded.username;
+
+    
+  }catch(error:unknown){
+    console.log(error);
+  }
+  
+}
+  
+
 const getUserTasks = async () => {
   try {
     const response = await useApi("task/6611e9299cd0a450907248e4", {
       method: "GET",
     });
-    console.log(response);
   } catch (error) {
     console.error("Erro ao buscar dados:", error);
   }

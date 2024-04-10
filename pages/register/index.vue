@@ -75,7 +75,6 @@ const register = async ()=> {
             password: password.value,
             username: userName.value
         }
-        console.log('Dados enviados: ', data);
 
         const newUser = await useApi("user", {
         method: "POST",

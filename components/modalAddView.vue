@@ -4,7 +4,7 @@
       <template v-slot:default="{ isActive }">
         <v-card class="card">
             <v-card-title class="card-title">
-                <span>{{ title }}</span>    
+                <span>Nova Tarefa</span>    
             </v-card-title>
           <v-card-text>
             <v-row>
@@ -21,7 +21,7 @@
             <v-spacer></v-spacer>
 
             <v-btn color="error" variant="tonal" text="Cancelar" @click="$emit('close')"></v-btn>
-            <v-btn color="success" variant="tonal" text="Salvar" @click="saveData"></v-btn>
+            <v-btn color="success" variant="tonal" text="Salvar" @click="saveData" :loading="loading"></v-btn>
           </v-card-actions>
         </v-card>
       </template>
@@ -30,15 +30,15 @@
 </template>
 
 <script setup lang="ts">
+
 const emit = defineEmits(["update:enable", "close"]);
 const taskTitle = ref("");
 const taskDescription = ref("");
-
+const loading = ref(false);
 
 const props = defineProps({
-  title: { type: String, required: true },
-  scope: { type: String, required: true, default: "new" },
   enable: { type: Boolean, required: true },
+  userId: { type: String, required: true},
 });
 
 const enableValue = computed({
@@ -49,10 +49,35 @@ const enableValue = computed({
 const toast = useToast();
 
 const saveData = async () => {
-    toast.success("Tarefa salva com sucesso");
-    emit("close");
+    loading.value = true;
+    try{
+      if(taskTitle.value === "" || taskDescription.value === ""){
+        toast.error("Preencha todos os campos");
+        return;
+      }
+
+      const data = {
+        title: taskTitle.value,
+        content: taskDescription.value,
+        userId: props.userId
+      }
+
+      const newTask = await useApi("task", {
+        method: "POST",
+        data
+      });
+      if(!newTask) throw new Error("Erro ao salvar tarefa");
+
+      toast.success("Tarefa salva com sucesso");
+      loading.value = false;
+      emit("close");
+
+    } catch(error:unknown){
+        loading.value = false;
+        toast.error("Erro ao salvar tarefa");
+    }
 }
-  
+
 </script>
 
 <style>
