@@ -15,7 +15,7 @@
                     <v-card-text>
                         <v-form>
                             <v-text-field label="Usuário" v-model="user" outlined></v-text-field>
-                            <v-text-field label="Senha" v-model="password" outlined></v-text-field>
+                            <v-text-field type="password" label="Senha" v-model="password" outlined></v-text-field>
                             <v-btn :loading="loading" color="primary" @click="login">Entrar</v-btn>
                         </v-form>
                         <p class="login-text">Não possui conta? se <a href="#" @click="goToRegister"> cadastre</a></p>
@@ -23,7 +23,6 @@
                 </v-card>
                     </v-col>
                 </v-row>
-                
 
             </v-col>
             <v-col class="login-bg" cols="8" v-if="!isSmallScreen">
@@ -63,11 +62,8 @@ const login = async () => {
             throw new Error("Erro realizar login.");
         }
 
+        console.log('token gerado', getCSRFToken.csrfToken)
         document.cookie = `csrf=${getCSRFToken.csrfToken}; path=/`;
-
-        //armazenar no session storage
-        const StringfiedCSRFToken = JSON.stringify(getCSRFToken.csrfToken);
-        sessionStorage.setItem("csrf", StringfiedCSRFToken);
 
         const login = await useApi("auth", {
         method: "POST",

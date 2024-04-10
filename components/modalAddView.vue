@@ -8,8 +8,6 @@
             </v-card-title>
           <v-card-text>
             <v-row>
-              
-              {{ props.task?.title }}
               <v-col cols="12">
                 <v-text-field label="Título" v-model="taskTitle" outlined></v-text-field>
               </v-col>
@@ -73,8 +71,7 @@ const createTask = async () => {
   loading.value = true;
     try{
       if(taskTitle.value === "" || taskDescription.value === ""){
-        toast.error("Preencha todos os campos");
-        return;
+        throw new Error("Preencha todos os campos");
       }
 
       const data = {
@@ -97,8 +94,8 @@ const createTask = async () => {
       emit("close");
 
     } catch(error:unknown){
-        loading.value = false;
-        toast.error("Erro ao salvar tarefa");
+      loading.value = false;
+      toast.error("Erro ao salvar tarefa");
     }
 }
 
@@ -106,8 +103,7 @@ const updateTask = async() => {
   loading.value = true;
   try{
     if(taskTitle.value === "" || taskDescription.value === ""){
-      toast.error("Preencha todos os campos");
-      return;
+      throw new Error("Preencha todos os campos");
     }
 
     const data = {
