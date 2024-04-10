@@ -16,7 +16,7 @@
                         <v-form>
                             <v-text-field label="Usuário" v-model="user" outlined></v-text-field>
                             <v-text-field label="Senha" v-model="password" outlined></v-text-field>
-                            <v-btn color="primary" @click="login">Entrar</v-btn>
+                            <v-btn :loading="loading" color="primary" @click="login">Entrar</v-btn>
                         </v-form>
                         <p class="login-text">Não possui conta? se <a href="/register"> cadastre</a></p>
                     </v-card-text>
@@ -52,7 +52,7 @@ const login = async () => {
     loading.value = true;
     try{
         const data = {
-            user: user.value,
+            username: user.value,
             password: password.value
         }
 

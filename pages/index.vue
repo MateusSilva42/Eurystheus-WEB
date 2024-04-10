@@ -10,7 +10,7 @@
       <v-toolbar-title>Olá, @Mateus</v-toolbar-title>
       <v-menu>
         <template v-slot:activator="{ props }">
-          <v-btn icon v-bind="props" @click="notify">
+          <v-btn icon v-bind="props" @click="handleLogout">
             <v-icon>mdi-logout</v-icon>
           </v-btn>
         </template>
@@ -55,17 +55,15 @@
 
 <script setup lang="ts">
 import { useDisplay } from 'vuetify';
+import { useRouter } from '#vue-router';
 
 let tab = ref('');
 const display = useDisplay();
+const router = useRouter();
 
-const notify = () => {
-  const toast = useToast();
-  toast.success("Usuário deslogou com sucesso");
-};
-
-const handleLogout = (item: { action: string }) => {
-  console.log("Usuário fez logout");
+const handleLogout = () => {
+   localStorage.removeItem("token");
+    router.push("/login");
 };
 
 const getUserTasks = async () => {
